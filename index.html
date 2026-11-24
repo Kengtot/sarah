@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Happy 14th Birthday!</title>
+<!--
+  HOW TO CUSTOMIZE
+  1. Put photo1.jpg, photo2.jpg, photo3.jpg and birthday-music.mp3 in the SAME folder as this file.
+  2. Change captions or file names in PHOTOS, and the song in MUSIC (near the bottom, in the <script>).
+  3. Double-click index.html to open it. Fonts load online; offline it falls back to cursive/system fonts.
+  No music file yet? A built-in music-box "Happy Birthday" tune plays instead.
+-->
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#4b3a73;--pu:#7a4fd8;--script:"Pacifico","Segoe Script","Brush Script MT",cursive;--body:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box;margin:0}
+[hidden]{display:none!important}
+body{font-family:var(--body);color:var(--ink);min-height:100vh;overflow-x:hidden;background:linear-gradient(135deg,#ffd6ea,#e2d4ff,#c7e8ff,#f6d6ff);background-size:400% 400%;animation:bg 18s ease infinite}
+body.lock{overflow:hidden;height:100vh}
+button{font:inherit}
+:focus-visible{outline:3px solid var(--pu);outline-offset:4px}
+h1,h2,footer,figcaption{font-family:var(--script);font-weight:400}
+@keyframes bg{50%{background-position:100% 50%}}
+@keyframes tw{0%,100%{opacity:.2;transform:scale(.6)}50%{opacity:1;transform:scale(1.2)}}
+@keyframes bob{50%{transform:translateY(-10px)}}
+@keyframes sway{from{transform:rotateX(-20deg) rotateY(-42deg)}to{transform:rotateX(-20deg) rotateY(-18deg)}}
+@keyframes shake{0%,100%{transform:rotate(0)}20%{transform:rotate(-7deg)}40%{transform:rotate(7deg)}60%{transform:rotate(-5deg)}80%{transform:rotate(4deg)}}
+@keyframes pop{from{transform:translateY(-55px) rotateZ(0) scale(1.07)}to{transform:translateY(-560px) rotateZ(-40deg) scale(1.07)}}
+@keyframes pulse{50%{transform:scale(1.1);opacity:.85}}
+@keyframes flash{from{transform:scale(.6);opacity:1}to{transform:scale(4);opacity:0}}
+@keyframes rise{0%{transform:translate(0,0) rotate(-5deg);opacity:0}8%,92%{opacity:.85}50%{transform:translate(18px,-60vh) rotate(5deg)}100%{transform:translate(-8px,-118vh) rotate(-5deg);opacity:0}}
+@keyframes flick{from{transform:scale(1) rotate(-3deg)}to{transform:scale(.88,1.12) rotate(3deg)}}
+@keyframes glow{from{box-shadow:0 0 22px 2px #ff9ec98a,0 20px 60px #8b6cf033}to{box-shadow:0 0 48px 10px #b79bffaa,0 20px 60px #8b6cf033}}
+@keyframes eq{to{height:16px}}
+@keyframes blink{50%{opacity:0}}
+@keyframes fade{from{opacity:0}}
+
+/* ---------- Screen 1: gift box ---------- */
+#intro{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(8px,3vh,28px);padding:16px;text-align:center;transition:opacity .9s,transform .9s,visibility .9s}
+#intro.gone{opacity:0;visibility:hidden;transform:scale(1.12);pointer-events:none}
+h1{font-size:clamp(1.7rem,7vw,3.1rem);line-height:1.3;color:var(--pu);text-shadow:0 2px 0 #fff,0 0 26px #fff;max-width:14em}
+.hint{font-weight:700;font-size:clamp(1rem,3.5vw,1.2rem);animation:pulse 2s ease-in-out infinite}
+.scene{position:relative;width:260px;height:260px;perspective:900px;display:grid;place-items:center;cursor:pointer;animation:bob 3s ease-in-out infinite}
+.scene.shake{animation:shake .5s}
+.scene.open{animation:none}
+.scene::before{content:"";position:absolute;z-index:-1;left:50%;top:50%;width:440px;height:440px;margin:-220px;border-radius:50%;background:radial-gradient(circle,#fff 0,#fff3b8aa 28%,transparent 68%);opacity:.6;animation:pulse 2.6s ease-in-out infinite}
+.scene.open::before{animation:flash 1.3s ease-out forwards}
+.scene::after{content:"";position:absolute;z-index:-1;left:50%;bottom:4px;width:190px;height:28px;margin-left:-95px;background:radial-gradient(#5b3fb355,transparent 70%)}
+.sp{position:absolute;color:#fff;text-shadow:0 0 8px #ffd45e,0 0 16px #ff9ec9;animation:tw 2s ease-in-out infinite;pointer-events:none}
+.box{position:relative;width:0;height:0;transform-style:preserve-3d;transform:rotateX(-20deg) rotateY(-30deg);animation:sway 5s ease-in-out infinite alternate}
+.cube{position:absolute;left:0;top:0;width:0;height:0;transform-style:preserve-3d}
+.base{transform:translateY(18px);--c1:#b99cff;--c2:#9b7cf2;--c3:#cfbcff}
+.lid{transform:translateY(-55px) rotateZ(0) scale(1.07);--c1:#ff9fca;--c2:#f57fb7;--c3:#ffbcd9}
+.open .lid{animation:pop 1.2s cubic-bezier(.2,.8,.3,1) forwards}
+.f{position:absolute;backface-visibility:hidden;border-radius:3px}
+.front,.back,.left,.right{width:150px;height:var(--h);left:-75px;top:calc(var(--h)/-2);background:linear-gradient(90deg,transparent 42%,#ffe07a 42% 58%,transparent 58%),radial-gradient(circle,#fff8 3px,transparent 4px) 0 0/22px 22px,var(--c)}
+.front,.back{--c:var(--c1)}
+.left,.right{--c:var(--c2)}
+.top,.bottom{width:150px;height:150px;left:-75px;top:-75px;background:linear-gradient(90deg,transparent 42%,#ffe07a 42% 58%,transparent 58%),linear-gradient(transparent 42%,#ffe07a 42% 58%,transparent 58%),var(--c3)}
+.front{transform:translateZ(75px)}
+.back{transform:rotateY(180deg) translateZ(75px)}
+.right{transform:rotateY(90deg) translateZ(75px)}
+.left{transform:rotateY(-90deg) translateZ(75px)}
+.top{transform:rotateX(90deg) translateZ(calc(var(--h)/2))}
+.bottom{transform:rotateX(-90deg) translateZ(calc(var(--h)/2))}
+.bow{position:absolute;left:-32px;top:-52px;width:64px;height:36px;transform:rotateY(30deg) rotateX(20deg);background:radial-gradient(circle at 50% 72%,#ffd45e 0 7px,transparent 8px)}
+.bow::before,.bow::after{content:"";position:absolute;top:0;width:30px;height:28px;border:7px solid #ffd45e;border-radius:50%}
+.bow::before{left:0;transform:rotate(-30deg)}
+.bow::after{right:0;transform:rotate(30deg)}
+
+/* ---------- Floating balloons, hearts, stars, confetti ---------- */
+#fx{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.st{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;box-shadow:0 0 6px 2px #fffc;animation:tw 3s ease-in-out infinite}
+.h{position:absolute;bottom:-40px;font-style:normal;line-height:1;text-shadow:0 0 10px currentColor;opacity:0;animation:rise linear infinite}
+.bl{position:absolute;bottom:-130px;width:56px;height:70px;border-radius:50% 50% 47% 47%;opacity:0;background:radial-gradient(circle at 35% 28%,#fffa 0 12%,transparent 14%),var(--c);animation:rise linear infinite}
+.bl::before{content:"";position:absolute;left:50%;top:97%;margin-left:-5px;border:5px solid transparent;border-top:0;border-bottom-color:var(--c)}
+.bl::after{content:"";position:absolute;left:50%;top:100%;width:1.5px;height:56px;background:#ffffffb0}
+#cf{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:40}
+
+/* ---------- Screen 2: celebration ---------- */
+main{position:relative;z-index:1;display:flex;flex-direction:column;gap:clamp(56px,10vw,100px);padding:84px 16px 72px;opacity:0;visibility:hidden;transition:opacity 1.2s .3s,visibility 0s .3s}
+main.show{opacity:1;visibility:visible}
+.rv{opacity:0;transform:translateY(32px);transition:opacity 1s,transform 1s}
+.rv.in{opacity:1;transform:none}
+.card{max-width:720px;width:100%;margin:0 auto;padding:clamp(24px,5vw,48px);text-align:center;background:#ffffffc7;border-radius:32px;animation:glow 3s ease-in-out infinite alternate}
+#hb{font-size:clamp(2.1rem,8.5vw,3.8rem);line-height:1.3;background:linear-gradient(90deg,#ff5fa2,#8b6cf0,#3aa7ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;filter:drop-shadow(0 0 10px #fff)}
+#msg{margin:18px auto 0;max-width:34em;font-size:clamp(1.05rem,3.7vw,1.3rem);line-height:1.8}
+#msg.typing::after{content:"|";margin-left:2px;animation:blink .7s steps(1) infinite}
+.sh{text-align:center;font-size:clamp(1.6rem,6vw,2.4rem);color:var(--pu);margin-bottom:24px;text-shadow:0 0 18px #fff}
+footer{text-align:center;color:var(--pu);font-size:1.25rem}
+
+/* cake */
+.cake{width:max-content;margin:0 auto;display:flex;flex-direction:column;align-items:center;cursor:pointer}
+.cd{display:flex;gap:18px;margin-bottom:-2px;position:relative;z-index:1}
+.c{position:relative;width:28px;height:52px;border-radius:9px 9px 3px 3px;background:linear-gradient(90deg,#fff6,transparent 45%),var(--c);display:grid;place-items:center;font:800 22px var(--body);color:#fff;text-shadow:0 1px 3px #0003}
+.fl{position:absolute;left:50%;bottom:100%;width:13px;height:22px;margin:0 0 4px -6.5px;border-radius:50% 50% 50% 50%/62% 62% 38% 38%;background:radial-gradient(circle at 50% 72%,#fff 0,#ffe27a 38%,#ff9a3c 100%);box-shadow:0 0 14px 6px #ffd27aa0,0 0 36px 16px #ffb34766;transform-origin:50% 100%;animation:flick .25s ease-in-out infinite alternate}
+.out .fl{animation:none;opacity:0;transform:scale(0);transition:.5s}
+.t{position:relative;border-radius:14px 14px 10px 10px;box-shadow:inset 0 -10px 0 #0000001a}
+.t2{width:150px;height:56px;background:radial-gradient(circle at 12px 0,#fff 0 11px,transparent 12px) 0 0/24px 22px repeat-x,#c8b4ff}
+.t1{width:220px;height:72px;margin-top:-4px;background:radial-gradient(circle at 12px 0,#fff 0 11px,transparent 12px) 0 0/24px 22px repeat-x,#ffa6cc}
+.plate{width:272px;height:16px;margin-top:-6px;border-radius:50%;background:linear-gradient(#fff,#e5dcff);box-shadow:0 10px 24px #8b6cf055}
+.wish{text-align:center;margin-top:22px;font-weight:700}
+
+/* gallery */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,4vw,30px);max-width:880px;margin:0 auto}
+.ph{position:relative;padding:12px 12px 8px;background:#fff;border-radius:24px;box-shadow:0 14px 36px #8b6cf038,0 0 0 5px #ffffff80;cursor:zoom-in;rotate:var(--r);transition:rotate .3s,scale .3s}
+.ph:first-child{grid-column:1/-1}
+.ph:hover,.ph:focus-visible{rotate:0deg;scale:1.02}
+.ph img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:16px;background:#eee}
+.ph:first-child img{aspect-ratio:16/10}
+.ph figcaption{padding:12px 6px 6px;text-align:center;font-size:1.05rem;color:var(--pu)}
+.ph::before,.ph::after{position:absolute;pointer-events:none;animation:bob 3s ease-in-out infinite}
+.ph::before{content:"♥";top:-14px;right:-8px;font-size:28px;color:#ff7fb0}
+.ph::after{content:"✦";bottom:44px;left:-10px;font-size:24px;color:#ffd45e;animation-delay:1s}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
+
+/* lightbox */
+#lb{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:18px;background:#2b1a5bd9;animation:fade .3s}
+#lb figure{text-align:center;color:#fff}
+#lbi{max-width:min(92vw,920px);max-height:78vh;border:10px solid #fff;border-radius:20px;box-shadow:0 20px 60px #0006}
+#lb figcaption{margin-top:14px;font-size:1.2rem}
+#lbx{position:absolute;top:calc(10px + env(safe-area-inset-top,0px));right:18px;font-size:36px;line-height:1;background:none;border:0;color:#fff;cursor:pointer}
+
+/* music button */
+#mb{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:12px;z-index:30;display:flex;align-items:center;gap:8px;border:0;border-radius:999px;padding:9px 15px;background:#ffffffe0;color:var(--pu);font-weight:700;font-size:.9rem;box-shadow:0 6px 20px #8b6cf040;cursor:pointer}
+.eq{display:inline-flex;gap:2px;align-items:flex-end;height:16px}
+.eq i{width:3px;height:5px;border-radius:2px;background:currentColor}
+#mb.on .eq i{animation:eq .7s ease-in-out infinite alternate}
+.eq i:nth-child(2){animation-delay:.15s}.eq i:nth-child(3){animation-delay:.3s}.eq i:nth-child(4){animation-delay:.45s}
+
+@media(prefers-reduced-motion:reduce){*,::before,::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body class="lock">
+
+<div id="fx"></div>
+<canvas id="cf"></canvas>
+
+<!-- MUSIC CONTROL (the song file is set by MUSIC in the script below) -->
+<button id="mb" aria-label="Play or pause music"><span class="eq"><i></i><i></i><i></i><i></i></span><span id="ml">Play music</span></button>
+
+<!-- SCREEN 1: the gift box -->
+<section id="intro">
+  <h1>A Special Surprise Just for You!</h1>
+  <div class="scene" id="gift" role="button" tabindex="0" aria-label="Open your birthday gift"><div class="box" id="box"></div></div>
+  <p class="hint">Tap the gift to open your birthday surprise!</p>
+</section>
+
+<!-- SCREEN 2: the celebration -->
+<main id="main">
+  <section class="card rv">
+    <h2 id="hb">Happy 14th Birthday, sis!</h2>
+    <p id="msg"></p>
+  </section>
+
+  <section class="rv">
+    <h2 class="sh">Make a Wish!</h2>
+    <div class="cake" id="cake" role="button" tabindex="0" aria-label="Blow out the candles">
+      <div class="cd">
+        <i class="c" style="--c:#ff8fbf">1<u class="fl"></u></i>
+        <i class="c" style="--c:#7cc4ff">4<u class="fl"></u></i>
+      </div>
+      <div class="t t2"></div><div class="t t1"></div><div class="plate"></div>
+    </div>
+    <p class="wish" id="wish">Make a wish… then tap the cake to blow out the candles!</p>
+  </section>
+
+  <section class="rv">
+    <h2 class="sh">Our Favorite Memories</h2>
+    <!-- PHOTOS: file names and captions are set in PHOTOS in the script below -->
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <footer>Made with ♥ by your big brother</footer>
+</main>
+
+<!-- Photo lightbox -->
+<div id="lb" hidden><figure><img id="lbi" alt=""><figcaption id="lbc"></figcaption></figure><button id="lbx" aria-label="Close">×</button></div>
+
+<script>
+/* ================= EDIT THESE ================= */
+const MUSIC = "birthday-music.mp3";   // <-- YOUR SONG: put the file next to index.html (or change the name here)
+const PHOTOS = [                      // <-- YOUR 3 PHOTOS: put the files next to index.html
+  {src:"photo1.jpg", cap:"our first target memory with ate! ♥"},              // PHOTO 1 (large featured picture)
+  {src:"photo2.jpg", cap:"hope we can make more memories like this"},    // PHOTO 2
+  {src:"photo3.jpg", cap:"One of my favorite memories with you"}               // PHOTO 3
+];
+/* ============================================== */
+
+const $=id=>document.getElementById(id),
+      el=(t,c)=>{const e=document.createElement(t);e.className=c||"";return e},
+      rnd=(a,b)=>a+Math.random()*(b-a);
+const fx=$("fx"),intro=$("intro"),main=$("main"),scene=$("gift");
+
+/* ---- 3D gift box (CSS faces built here) ---- */
+function cube(cls,h){const c=el("div","cube "+cls);c.style.setProperty("--h",h+"px");
+  ["front","back","right","left","top","bottom"].forEach(n=>c.append(el("b","f "+n)));return c}
+const lid=cube("lid",38);lid.append(el("div","bow"));
+$("box").append(cube("base",110),lid);
+for(let i=0;i<10;i++){const s=el("span","sp");s.textContent="✦";
+  s.style.cssText=`left:${rnd(0,95)}%;top:${rnd(0,90)}%;font-size:${rnd(12,26)}px;animation-delay:${rnd(0,2)}s`;scene.append(s)}
+for(let i=0;i<30;i++){const s=el("i","st");
+  s.style.cssText=`left:${rnd(0,100)}%;top:${rnd(0,100)}%;animation-delay:${rnd(0,3)}s;animation-duration:${rnd(2,5)}s`;fx.append(s)}
+
+/* ---- Balloons, hearts and sparkles (start after the gift opens) ---- */
+function ambient(){
+  const bc=["#ff9ec9","#b79bff","#8fd0ff","#ffd45e","#a6f0c9","#ffb0a0"];
+  for(let i=0;i<9;i++){const b=el("div","bl");
+    b.style.cssText=`left:${3+i*10.5+rnd(0,5)}%;--c:${bc[i%6]};animation-duration:${rnd(24,40)}s;animation-delay:${-rnd(0,30)}s`;fx.append(b)}
+  const hc=["#ff7fb0","#fff","#b79bff","#ffd45e"],hs=["♥","✦","✧","★"];
+  for(let i=0;i<16;i++){const h=el("i","h");h.textContent=hs[i%4];
+    h.style.cssText=`left:${rnd(0,100)}%;font-size:${rnd(12,28)}px;color:${hc[i%4]};animation-duration:${rnd(12,24)}s;animation-delay:${-rnd(0,20)}s`;fx.append(h)}}
+
+/* ---- Confetti ---- */
+const cv=$("cf"),cx=cv.getContext("2d");let P=[],raf=0;
+const fit=()=>{cv.width=innerWidth;cv.height=innerHeight};fit();addEventListener("resize",fit);
+function confetti(n,burst){const cl=["#ff7fb0","#8b6cf0","#7cc4ff","#ffd45e","#9be8bd","#fff"];
+  for(let i=0;i<n;i++)P.push({x:burst?cv.width/2:rnd(0,cv.width),y:burst?cv.height*.5:-rnd(20,cv.height*.5),
+    vx:rnd(-1,1)*(burst?9:1.5),vy:burst?-rnd(6,16):rnd(1,3),s:rnd(6,13),r:rnd(0,6),vr:rnd(-.3,.3),c:cl[i%6]});
+  if(!raf)loop()}
+function loop(){cx.clearRect(0,0,cv.width,cv.height);P=P.filter(p=>p.y<cv.height+30);
+  for(const p of P){p.vy=Math.min(p.vy+.12,4.5);p.x+=p.vx+Math.sin(p.y/30)*.8;p.y+=p.vy;p.r+=p.vr;
+    cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;cx.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);cx.restore()}
+  raf=P.length?requestAnimationFrame(loop):0}
+
+/* ---- Music: uses MUSIC if the file exists, otherwise a built-in music-box tune ---- */
+const A=new Audio(MUSIC),mb=$("mb");A.loop=true;A.volume=.7;
+let ctx,mode,playing=false,next=0,timer;
+const N=[-2,-2,0,-2,3,2,-2,-2,0,-2,5,3,-2,-2,10,7,3,2,0,8,8,7,3,5,3],
+      D=[.75,.25,1,1,1,2,.75,.25,1,1,1,2,.75,.25,1,1,1,1,2,.75,.25,1,1,1,2];
+function sched(){let t=Math.max(next,ctx.currentTime+.1);
+  N.forEach((n,i)=>{const d=D[i]*.5,e=t+d*1.8;
+    [[1,.2],[2,.06]].forEach(([m,v])=>{const o=ctx.createOscillator(),g=ctx.createGain();
+      o.type="triangle";o.frequency.value=440*2**(n/12)*m;
+      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.02);g.gain.exponentialRampToValueAtTime(.001,e);
+      o.connect(g);g.connect(ctx.destination);o.start(t);o.stop(e)});
+    t+=d});
+  next=t+1}
+function ui(){mb.classList.toggle("on",playing);$("ml").textContent=playing?"Pause":"Play music"}
+function play(){
+  ctx=ctx||new(window.AudioContext||window.webkitAudioContext)();   // created inside the click so browsers allow sound
+  if(mode==="synth"){ctx.resume();
+    if(!timer){sched();timer=setInterval(()=>{if(ctx.currentTime>next-3)sched()},500)}
+    playing=true;ui();return}
+  A.play().then(()=>{mode="file";playing=true;ui()}).catch(()=>{mode="synth";play()})}
+function pause(){if(mode==="synth")ctx.suspend();else A.pause();playing=false;ui()}
+mb.onclick=()=>playing?pause():play();
+
+/* ---- Greeting (typed) ---- */
+const REST="I can’t believe you’re already 14. It feels like just yesterday you were my annoying little shadow, and now you’re growing into such an incredible young woman. I hope your day is filled with fun, gifts, cake, and everything you’ve been wishing for. Love you always!";
+function type(){const m=$("msg");m.textContent=REST;m.style.minHeight=m.offsetHeight+"px";m.textContent="";m.classList.add("typing");
+  let i=0;(function t(){m.textContent=REST.slice(0,++i);if(i<REST.length)setTimeout(t,26);else m.classList.remove("typing")})()}
+
+/* ---- Opening the gift ---- */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.12});
+let opened=false;
+function openGift(){if(opened)return;opened=true;play();
+  scene.classList.add("shake");
+  setTimeout(()=>{scene.classList.remove("shake");scene.classList.add("open");confetti(110,true)},500);
+  setTimeout(reveal,2000)}
+function reveal(){intro.classList.add("gone");document.body.classList.remove("lock");scrollTo(0,0);
+  main.classList.add("show");ambient();confetti(150);
+  document.querySelectorAll(".rv").forEach(e=>io.observe(e));setTimeout(type,900)}
+const key=f=>e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();f()}};
+scene.onclick=openGift;scene.onkeydown=key(openGift);
+
+/* ---- Cake: tap to blow out the candles ---- */
+const cake=$("cake");
+function blow(){const o=cake.classList.toggle("out");
+  $("wish").textContent=o?"Your wish is on its way ✨ (tap to relight the candles)":"Make a wish… then tap the cake to blow out the candles!";
+  if(o)confetti(90)}
+cake.onclick=blow;cake.onkeydown=key(blow);
+
+/* ---- Photo gallery + lightbox ---- */
+const ph=n=>"data:image/svg+xml,"+encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' width='800' height='560'><defs><linearGradient id='g' x2='1' y2='1'><stop stop-color='#ffd1e6'/><stop offset='1' stop-color='#cfc2ff'/></linearGradient></defs><rect width='800' height='560' fill='url(#g)'/><text x='400' y='270' font-size='110' fill='#fff' text-anchor='middle'>♥</text><text x='400' y='360' font-family='sans-serif' font-size='34' fill='#6a4bd0' text-anchor='middle'>Add "+n+" next to index.html</text></svg>");
+const lb=$("lb");
+function zoom(s,c){$("lbi").src=s;$("lbi").alt=c;$("lbc").textContent=c;lb.hidden=false}
+PHOTOS.slice(0,3).forEach((p,i)=>{
+  const f=el("figure","ph"),im=new Image(),c=el("figcaption");
+  f.style.setProperty("--r",[-1.2,1.5,-1][i]+"deg");f.tabIndex=0;f.setAttribute("role","button");f.setAttribute("aria-label","Enlarge photo "+(i+1));
+  im.alt=p.cap;im.src=p.src;im.onerror=()=>{im.onerror=null;im.src=ph(p.src)};   // shows a labeled placeholder if the file is missing
+  c.textContent=p.cap;f.append(im,c);
+  f.onclick=()=>zoom(im.src,p.cap);f.onkeydown=key(()=>f.click());
+  $("grid").append(f)});
+lb.onclick=()=>{lb.hidden=true};
+addEventListener("keydown",e=>{if(e.key==="Escape")lb.hidden=true});
+</script>
+</body>
+</html>
